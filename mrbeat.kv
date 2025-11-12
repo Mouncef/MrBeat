@@ -1,0 +1,108 @@
+#:import track track
+#:import play_indicator play_indicator
+
+MainWidget:
+
+<VerticalSpacingWidget@Widget>:
+    size_hint_y: 0.01
+
+<ControlButton@Button>:
+
+
+<MainWidget>:
+    tracks_layout: tracks_layout
+    play_indicator_widget: play_indicator_widget
+    BoxLayout:
+        orientation: "vertical"
+        RelativeLayout:
+            size_hint_y: None
+            height: dp(75)
+            Image:
+                source: "assets/images/top_background.png"
+                allow_stretch: True
+                keep_ratio: False
+            Image:
+                source: "assets/images/logo.png"
+                width: dp(230)
+                size_hint_x: None
+                allow_stretch: True
+            BoxLayout:
+                width: dp(180)
+                size_hint_x: None
+                pos_hint: { "center_x": .5 }
+                ControlButton:
+                    on_press: root.on_play_button_pressed()
+                    background_normal: "assets/images/play_button_normal.png"
+                    background_down: "assets/images/play_button_down.png"
+                ControlButton:
+                    background_normal: "assets/images/stop_button_normal.png"
+                    background_down: "assets/images/stop_button_down.png"
+                    on_press: root.on_stop_button_pressed()
+            BoxLayout:
+                size_hint_x: None
+                width: dp(180)
+                pos_hint: { "right": 1 }
+                ControlButton:
+                    background_normal: "assets/images/minus_button_normal.png"
+                    background_down: "assets/images/minus_button_down.png"
+                    size_hint_x: None
+                    width: dp(40)
+                    on_press: root.bpm -= 5
+                RelativeLayout:
+                    Image:
+                        source: "assets/images/bpm_lcd_background.png"
+                    Label:
+                        pos: -dp(2), dp(2)
+                        text: "888"
+                        font_name: "assets/fonts/Lcd.ttf"
+                        font_size: dp(36)
+                        opacity: .1
+                        color: 0, 1, 1, 1
+                    Label:
+                        pos: -dp(2), dp(2)
+                        text: '{:0>3}'.format(str(root.bpm))
+                        font_name: "assets/fonts/Lcd.ttf"
+                        font_size: dp(36)
+                        color: 0, 1, 1, 1
+                #Label:
+                #    canvas.before:
+                #        Rectangle:
+                #            source: "assets/images/bpm_lcd_background.png"
+                #            pos: self.pos
+                #            size: self.size
+                #    text: str(root.bpm) + " BPM"
+
+                ControlButton:
+                    background_normal: "assets/images/plus_button_normal.png"
+                    background_down: "assets/images/plus_button_down.png"
+                    size_hint_x: None
+                    width: dp(40)
+                    on_press: root.bpm += 5
+                Widget:
+                    size_hint_x: None
+                    width: dp(20)
+
+
+        RelativeLayout:
+            Image:
+                source: "assets/images/background.jpg"
+                allow_stretch: True
+                keep_ratio: False
+            BoxLayout:
+                x: dp(16)
+                y: dp(16)
+                size_hint: None, None
+                size: (self.parent.width -dp(32), self.parent.height -dp(32))
+                orientation: 'vertical'
+                PlayIndicatorWidget:
+                    id: play_indicator_widget
+                    size_hint_y: None
+                    height: dp(18)
+                    left_align: root.TRACK_STEPS_LEFT_ALIGN
+                ScrollView:
+                    do_scroll_x: False
+                    do_scroll_y: True
+                    BoxLayout:
+                        size_hint_min_y: dp(75) * root.nb_tracks
+                        id: tracks_layout
+                        orientation: "vertical"
